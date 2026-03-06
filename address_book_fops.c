@@ -8,6 +8,9 @@
 
 #include "address_book.h"
 
+#include "address_book_fops.h"
+#include "address_book_menu.h"
+
 Status load_file(AddressBook *address_book)
 {
 	int ret = access(DEFAULT_FILE, F_OK); // Checks for file existence

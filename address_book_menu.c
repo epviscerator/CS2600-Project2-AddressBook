@@ -69,7 +69,7 @@ void menu_header(const char *str)
 	printf("#######  Address Book  #######\n");
 	if (*str != '\0')
 	{
-		printf("#######  %s\n", str);
+		printf("#######  %s\n", *str);
 	}
 }
 
