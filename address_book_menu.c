@@ -21,6 +21,35 @@ int get_option(int type, const char *msg)
 	 * Read an number
 	 * Read a charcter
 	 */ 
+	int i;
+	char c;
+
+	switch (type) { 
+		case 0:
+			scanf("%n");
+			return 0;
+			break;
+
+		case 1:
+			
+			printf("%s\n");
+			scanf("%d", &i); 
+			
+			return i;
+			break;
+		
+		case 2:
+			
+			printf("%s\n");
+			scanf("%c", &c);
+			return c;
+			break;
+		
+		
+	}
+		
+	
+		
 
 	/* Fill the code to add above functionality */
 }
@@ -56,6 +85,8 @@ Status list_contacts(AddressBook *address_book, const char *title, int *index, c
 	 * Should be menu based
 	 * The menu provide navigation option if the entries increase the page size
 	 */ 
+	
+	
 
 	return e_success;
 }
@@ -65,7 +96,7 @@ void menu_header(const char *str)
 	fflush(stdout);
 
 	system("clear");
-
+	
 	printf("#######  Address Book  #######\n");
 	if (*str != '\0')
 	{
@@ -90,6 +121,7 @@ void main_menu(void)
 
 Status menu(AddressBook *address_book)
 {
+	
 	ContactInfo backup;
 	Status ret;
 	int option;
@@ -97,17 +129,18 @@ Status menu(AddressBook *address_book)
 	do
 	{
 		main_menu();
+		
+		option = get_option(NUM, ""); // Causes a segmentation fault... somehow...
 
-		option = get_option(NUM, "");
-
-		if ((address_book-> count == 0) && (option != e_add_contact))
+		
+		if ((address_book-> count == 0) && (option != e_add_contact)) 
 		{
 			get_option(NONE, "No entries found!!. Would you like to add? Use Add Contacts");
 
 			continue;
 		}
-
-		switch (option)
+		
+		switch (option) 
 		{
 			case e_add_contact:
 				add_contacts(address_book);
@@ -138,6 +171,7 @@ Status menu(AddressBook *address_book)
 Status add_contacts(AddressBook *address_book)
 {
 	/* Add the functionality for adding contacts here */
+	
 }
 
 Status search(const char *str, AddressBook *address_book, int loop_count, int field, const char *msg, Modes mode)
