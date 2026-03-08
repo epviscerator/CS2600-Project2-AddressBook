@@ -17,21 +17,19 @@ int get_option(int type, const char *msg)
 {
 	/*
 	 * Mutilfuction user intractions like
-	 * Just an enter key detection
-	 * Read an number
-	 * Read a charcter
 	 */ 
 	int i;
 	char c;
 
 	switch (type) { 
+		//	 * Just an enter key detection
 		case 0:
 			scanf("%n");
 			return 0;
 			break;
 
 		case 1:
-			
+			//	 * Read an number
 			printf("%s\n");
 			scanf("%d", &i); 
 			
@@ -39,7 +37,7 @@ int get_option(int type, const char *msg)
 			break;
 		
 		case 2:
-			
+			//	 * Read a charcter
 			printf("%s\n");
 			scanf("%c", &c);
 			return c;
@@ -48,9 +46,6 @@ int get_option(int type, const char *msg)
 		
 	}
 		
-	
-		
-
 	/* Fill the code to add above functionality */
 }
 
@@ -130,7 +125,7 @@ Status menu(AddressBook *address_book)
 	{
 		main_menu();
 		
-		option = get_option(NUM, ""); // Causes a segmentation fault... somehow...
+		option = get_option(NUM, ""); 
 
 		
 		if ((address_book-> count == 0) && (option != e_add_contact)) 
@@ -155,8 +150,8 @@ Status menu(AddressBook *address_book)
 				delete_contact(address_book);
 				break;
 			case e_list_contacts:
+				//list_contacts(address_book);
 				break;
-				/* Add your implementation to call list_contacts function here */
 			case e_save:
 				save_file(address_book);
 				break;
@@ -171,7 +166,55 @@ Status menu(AddressBook *address_book)
 Status add_contacts(AddressBook *address_book)
 {
 	/* Add the functionality for adding contacts here */
+	int option;
+	ContactInfo newContact;
+
 	
+	
+
+	int nameNum = 1;
+	//char tempName[30];
+
+	while (option != 0) {
+		menu_header("Add Contact");
+		
+		printf("\n0. Exit\n");
+		printf("1. Name : \n");
+		printf("2. Phone No. : \n");
+		printf("3. Email : \n");
+
+		printf("Please select an option: \n");
+
+		option = get_option(NUM, "");
+		switch (option) {
+			case 0:
+				break;
+			
+			case 1:
+				// Add name
+				printf("fart");
+				scanf("Enter your contact's name: %s", newContact.name);
+				
+				nameNum++;
+				break;
+			case 2:
+				// Add phone num
+				break;
+			case 3:
+				// Add email
+				break;
+		}
+	}	
+	/*
+	char tempName[30];
+	char tempPhone[16]; // Australians have 15-digit phone numbers.
+	char tempEmail[320]; 
+
+	// struct ContactInfo ci; 
+	scanf("Add your contact's name: %s", &tempName);
+	scanf("Add your contact's phone number: %s", &tempPhone);
+	scanf("Add your contact's email addresses: %s", &tempEmail);
+	*/
 }
 
 Status search(const char *str, AddressBook *address_book, int loop_count, int field, const char *msg, Modes mode)
