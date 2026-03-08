@@ -27,5 +27,10 @@ int main(void)
 		}
 	}
 
+	address_book.count = 0;
+	address_book.list = malloc(sizeof(ContactInfo) * 100);
+
+	add_contacts(&address_book);
+
 	return 0;
 }
