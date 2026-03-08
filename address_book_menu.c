@@ -166,7 +166,7 @@ Status menu(AddressBook *address_book)
 Status add_contacts(AddressBook *address_book)
 {
 	/* Add the functionality for adding contacts here */
-	int option;
+	int option; // option is a high number to allow its use in the switch method
 	ContactInfo newContact;
 
 	
@@ -175,7 +175,7 @@ Status add_contacts(AddressBook *address_book)
 	int nameNum = 1;
 	//char tempName[30];
 
-	while (option != 0) {
+	do {
 		menu_header("Add Contact");
 		
 		printf("\n0. Exit\n");
@@ -186,14 +186,19 @@ Status add_contacts(AddressBook *address_book)
 		printf("Please select an option: \n");
 
 		option = get_option(NUM, "");
-		switch (option) {
+		switch (option) { // FOR REASONS THAT DISPROVE THE EXISTENCE OF GOD, ONCE ENTERING THIS SWITCH STATEMENT, THIS LOOPS BACK TO THE START OF DO.
+			
 			case 0:
 				break;
 			
 			case 1:
 				// Add name
-				printf("fart");
-				scanf("Enter your contact's name: %s", newContact.name);
+				
+				printf("Enter your contact's name: %s");
+				char tempName[NAME_LEN];
+				scanf("Enter your contact's name: %s", tempName);
+				//strcpy(newContact->name, tempName);
+				//fgets(newContact->name, NAME_LEN, stdin);
 				
 				nameNum++;
 				break;
@@ -204,11 +209,9 @@ Status add_contacts(AddressBook *address_book)
 				// Add email
 				break;
 		}
-	}	
+	}while (option != 0);
 	/*
-	char tempName[30];
-	char tempPhone[16]; // Australians have 15-digit phone numbers.
-	char tempEmail[320]; 
+
 
 	// struct ContactInfo ci; 
 	scanf("Add your contact's name: %s", &tempName);
