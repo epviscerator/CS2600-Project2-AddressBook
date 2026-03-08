@@ -376,6 +376,48 @@ Status search_contact(AddressBook *address_book)
 Status edit_contact(AddressBook *address_book)
 {
 	/* Add the functionality for edit contacts here */
+	int option;
+	ContactInfo searchContact;
+
+	menu_header("Search Contact to Edit by:");
+
+	printf("\n0. Back\n");
+	printf("1. Name\n");
+	printf("2. Phone No\n");
+	printf("3. Email ID\n");
+	printf("4. Serial No\n");
+
+	printf("Please select an option: \n");
+	
+	option = get_option(NUM, "");
+	switch (option) {
+		case e_first_opt:
+			break;
+		
+		case e_second_opt:
+			printf("Enter the Name: ");
+			scanf("%s", searchContact.name[0]);
+			// search for contact, etc. etc.
+			break;
+
+		case e_third_opt:
+			printf("Enter the Phone Number: ");
+			scanf("%s", searchContact.phone_numbers[0]);
+			// search for contact, etc. etc.
+			break;
+
+		case e_fourth_opt:
+			printf("Enter the Email Address: ");
+			scanf("%s", searchContact.email_addresses[0]);
+			// search
+			break;
+
+		case e_fifth_opt:
+			printf("Enter the Serial Number: ");
+			scanf("%d", &searchContact.si_no);
+			// search
+			break;
+	}
 }
 
 Status delete_contact(AddressBook *address_book)
