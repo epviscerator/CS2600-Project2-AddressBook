@@ -8,6 +8,7 @@
 
 #include "address_book_fops.h"
 
+#define PAGE_SIZE 10
 //#include "abk_fileops.h"
 //#include "abk_log.h"
 //#include "abk_menus.h"
@@ -46,7 +47,6 @@ int get_option(int type, const char *msg)
 		
 	}
 		
-	/* Fill the code to add above functionality */
 }
 
 Status save_prompt(AddressBook *address_book)
@@ -59,7 +59,7 @@ Status save_prompt(AddressBook *address_book)
 
 		option = get_option(CHAR, "\rEnter 'N' to Ignore and 'Y' to Save: ");
 
-		if (option == 'Y')
+		if (&option == "Y")
 		{
 			save_file(address_book);
 			printf("Exiting. Data saved in %s\n", DEFAULT_FILE);
@@ -79,9 +79,46 @@ Status list_contacts(AddressBook *address_book, const char *title, int *index, c
 	 * Add code to list all the contacts availabe in address_book.csv file
 	 * Should be menu based
 	 * The menu provide navigation option if the entries increase the page size
-	 */ 
-	
-	
+	 */
+	int start = *index;
+	int end = start + PAGE_SIZE;
+	int i;
+	char option;
+
+	if(end > address_book->count)
+	{
+		end = address_book->count;
+	}
+
+	printf("\n%s\n", title);
+	printf("------------------------------------------\n");
+
+	for(i = start; i < end; i++)
+	{
+		printf("%d. %s | %s | %s\n",
+		       address_book->list[i].si_no,
+		       address_book->list[i].name,
+		       address_book->list[i].phone_numbers,
+		       address_book->list[i].email_addresses);
+	}
+
+	printf("------------------------------------------\n");
+	printf("%s", msg);
+
+	scanf(" %c", &option);
+
+	if(option == 'n' && end < address_book->count)
+	{
+		*index += PAGE_SIZE;
+	}
+	else if(option == 'p' && *index >= PAGE_SIZE)
+	{
+		*index -= PAGE_SIZE;
+	}
+	else if(option == 'q')
+	{
+		return e_success;
+	}
 
 	return e_success;
 }
@@ -166,16 +203,13 @@ Status menu(AddressBook *address_book)
 Status add_contacts(AddressBook *address_book)
 {
 	/* Add the functionality for adding contacts here */
-	int option; // option is a high number to allow its use in the switch method
+	int option = -1;
 	ContactInfo newContact;
 
-	
-	
-
 	int nameNum = 1;
-	//char tempName[30];
+	char tempName[30];
 
-	do {
+	while (option != 0) {
 		menu_header("Add Contact");
 		
 		printf("\n0. Exit\n");
@@ -186,48 +220,153 @@ Status add_contacts(AddressBook *address_book)
 		printf("Please select an option: \n");
 
 		option = get_option(NUM, "");
-		switch (option) { // FOR REASONS THAT DISPROVE THE EXISTENCE OF GOD, ONCE ENTERING THIS SWITCH STATEMENT, THIS LOOPS BACK TO THE START OF DO.
-			
+		switch (option) {
 			case 0:
 				break;
 			
 			case 1:
 				// Add name
+				printf("Enter your contact's name: ");
+				scanf("%s", newContact.name);
 				
-				printf("Enter your contact's name: %s");
-				char tempName[NAME_LEN];
-				scanf("Enter your contact's name: %s", tempName);
-				//strcpy(newContact->name, tempName);
-				//fgets(newContact->name, NAME_LEN, stdin);
-				
-				nameNum++;
+				//nameNum++;
 				break;
 			case 2:
-				// Add phone num
+				printf("Enter phone number: ");
+				scanf("%s", newContact.phone_numbers);
+
 				break;
 			case 3:
-				// Add email
+				printf("Enter email: ");
+				scanf("%s", newContact.email_addresses);
+
 				break;
+			
+			default:
+				printf("Invalid option\n");
 		}
-	}while (option != 0);
-	/*
+	
+	}	
+	
+	address_book->count++; 
 
+	
+	newContact.si_no = address_book->count; 
+	address_book->list = &newContact; 
 
-	// struct ContactInfo ci; 
-	scanf("Add your contact's name: %s", &tempName);
-	scanf("Add your contact's phone number: %s", &tempPhone);
-	scanf("Add your contact's email addresses: %s", &tempEmail);
-	*/
+	return e_success;
 }
 
 Status search(const char *str, AddressBook *address_book, int loop_count, int field, const char *msg, Modes mode)
 {
 	/* Add the functionality for adding contacts here */
+
+	int i;
+	int found = 0;
+
+	printf("\nSearch Results\n");
+	printf("----------------------------------\n");
+
+	for(i = 0; i < loop_count; i++)
+	{
+		if((field == 1 && strcmp(str, *address_book->list[i].name)) == 0)
+		{
+			found = 1;
+		}
+		else if(field == 2 && strcmp(str, *address_book->list[i].phone_numbers) == 0)
+		{
+			found = 1;
+		}
+		else if(field == 3 && strcmp(str, *address_book->list[i].email_addresses) == 0)
+		{
+			found = 1;
+		}
+
+		if(found)
+		{
+			printf("%d. %s | %s | %s\n",
+			       address_book->list[i].si_no,
+			       address_book->list[i].name,
+			       address_book->list[i].phone_numbers,
+			       address_book->list[i].email_addresses);
+
+			found = 0;
+		}
+	}
+
+	printf("----------------------------------\n");
+
+	return e_success;
 }
 
 Status search_contact(AddressBook *address_book)
 {
-	/* Add the functionality for search contacts here */
+	int option;
+	char searchStr[100];
+
+	/*
+	if(address_book->count == 0)
+{
+	printf("No contacts available\n");
+	return e_success;
+}
+	*/
+	while(1)
+	{
+		menu_header("Search Contact");
+
+		printf("0. Exit\n");
+		printf("1. Search by Name\n");
+		printf("2. Search by Phone\n");
+		printf("3. Search by Email\n");
+
+		printf("Select option: ");
+		option = get_option(NUM, "");
+
+		switch(option)
+		{
+			case 0:
+				return e_success;
+
+			case 1:
+				printf("Enter name: ");
+				scanf("%s", searchStr);
+
+				search(searchStr, address_book,
+				       address_book->count,
+				       1,
+				       "",
+				       0);
+				break;
+
+			case 2:
+				printf("Enter phone number: ");
+				scanf("%s", searchStr);
+
+				search(searchStr, address_book,
+				       address_book->count,
+				       2,
+				       "",
+				       0);
+				break;
+
+			case 3:
+				printf("Enter email: ");
+				scanf("%s", searchStr);
+
+				search(searchStr, address_book,
+				       address_book->count,
+				       3,
+				       "",
+				       0);
+				break;
+
+			default:
+				printf("Invalid option\n");
+		}
+	}
+
+	return e_success;
 }
 
 Status edit_contact(AddressBook *address_book)
