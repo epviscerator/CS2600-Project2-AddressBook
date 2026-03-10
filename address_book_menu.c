@@ -229,6 +229,7 @@ Status add_contacts(AddressBook *address_book)
 	} while (option != 'Y' && option != 'N');
 	if (option == 'Y') {
 		strcpy(address_book->list[address_book->count].name[0], newContact.name[0]);
+		address_book->list[address_book->count].si_no = (address_book->count + 1);
 		for (int i = 0; i < 5; i++) {
 			strcpy(address_book->list[address_book->count].phone_numbers[i], newContact.phone_numbers[i]);
 			strcpy(address_book->list[address_book->count].email_addresses[i], newContact.email_addresses[i]);

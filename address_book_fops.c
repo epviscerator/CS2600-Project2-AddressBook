@@ -8,6 +8,8 @@
 
 #include "address_book.h"
 
+// Do not, at all costs, touch anything in here
+// I managed to get it to work and I'm not sure I could figure it out again
 Status load_file(AddressBook *address_book)
 {
 	int ret = access(DEFAULT_FILE, F_OK);
@@ -23,7 +25,7 @@ Status load_file(AddressBook *address_book)
 		 * Do error handling
 		 */ 
 		address_book->fp = fopen(DEFAULT_FILE, "r");
-		int numLines = 0;
+		int numLines = 1;
 		int fileChar;
 		do {
 			fileChar = fgetc(address_book->fp);
@@ -56,7 +58,8 @@ Status load_file(AddressBook *address_book)
 					strcpy(address_book->list[row].email_addresses[1], strtok(NULL, ","));
 					strcpy(address_book->list[row].email_addresses[2], strtok(NULL, ","));
 					strcpy(address_book->list[row].email_addresses[3], strtok(NULL, ","));
-					strcpy(address_book->list[row].email_addresses[4], strtok(NULL, ","));				
+					strcpy(address_book->list[row].email_addresses[4], strtok(NULL, ","));
+					address_book->list[row].si_no = row + 1;				
 				}
 			}
 		}
@@ -85,12 +88,43 @@ Status save_file(AddressBook *address_book)
 	 * Write contacts back to file.
 	 * Re write the complete file currently
 	 */ 
-	address_book->fp = fopen(DEFAULT_FILE, "w");
+	address_book->fp = fopen(DEFAULT_FILE, "w+");
 
 	if (address_book->fp == NULL)
 	{
 		return e_fail;
 	}
+
+	for (int i = 0; i < (address_book->count - 1); i++) {
+		fprintf(address_book->fp, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d\n",
+			address_book->list[i].name[0],
+			address_book->list[i].phone_numbers[0],
+			address_book->list[i].phone_numbers[1],
+			address_book->list[i].phone_numbers[2],
+			address_book->list[i].phone_numbers[3],
+			address_book->list[i].phone_numbers[4],
+			address_book->list[i].email_addresses[0],
+			address_book->list[i].email_addresses[1],
+			address_book->list[i].email_addresses[2],
+			address_book->list[i].email_addresses[3],
+			address_book->list[i].email_addresses[4],
+			address_book->list[i].si_no
+		);
+	}
+	fprintf(address_book->fp, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d",
+		address_book->list[address_book->count - 1].name[0],
+		address_book->list[address_book->count - 1].phone_numbers[0],
+		address_book->list[address_book->count - 1].phone_numbers[1],
+		address_book->list[address_book->count - 1].phone_numbers[2],
+		address_book->list[address_book->count - 1].phone_numbers[3],
+		address_book->list[address_book->count - 1].phone_numbers[4],
+		address_book->list[address_book->count - 1].email_addresses[0],
+		address_book->list[address_book->count - 1].email_addresses[1],
+		address_book->list[address_book->count - 1].email_addresses[2],
+		address_book->list[address_book->count - 1].email_addresses[3],
+		address_book->list[address_book->count - 1].email_addresses[4],
+		address_book->list[address_book->count - 1].si_no
+	);
 
 	/* 
 	 * Add the logic to save the file
