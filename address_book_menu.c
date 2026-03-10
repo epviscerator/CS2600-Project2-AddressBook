@@ -49,7 +49,7 @@ int get_option(int type, const char *msg)
 
 Status save_prompt(AddressBook *address_book)
 {
-	char option;
+	char option = ' ';
 
 	do
 	{
@@ -57,7 +57,7 @@ Status save_prompt(AddressBook *address_book)
 
 		option = get_option(CHAR, "\rEnter 'N' to Ignore and 'Y' to Save: ");
 
-		if (&option == "Y")
+		if (option == 'Y')
 		{
 			save_file(address_book);
 			printf("Exiting. Data saved in %s\n", DEFAULT_FILE);
