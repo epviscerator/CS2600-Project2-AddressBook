@@ -204,6 +204,7 @@ Status add_contacts(AddressBook *address_book)
 
 	int nameNum = 1;
 	char tempName[30];
+	int option;
 
 	printf("Enter phone number: ");
 	scanf("%s", newContact.phone_numbers[0]);
@@ -251,16 +252,20 @@ Status add_contacts(AddressBook *address_book)
 				printf("Invalid option\n");
 		}
 	
+
+		address_book->count++; 
+
+		
+		newContact.si_no = address_book->count; 
+		address_book->list = &newContact; 
+
+		return e_success;
+
 	}	
 	
-	address_book->count++; 
-
 	
-	newContact.si_no = address_book->count; 
-	address_book->list = &newContact; 
 
-	return e_success;
-}
+
 	
 
 
@@ -278,18 +283,18 @@ Status search(const char *str, AddressBook *address_book, int loop_count, int fi
 {
 	if(field == 1)
 	{
-		if((field == 1 && strcmp(str, *address_book->list[i].name)) == 0)
+		for(int j = 0; j < NAME_COUNT; j++)
 		{
 			if(strcmp(str, address_book->list[i].name[j]) == 0)
 			{
 				printf("Found: %s\n", address_book->list[i].name[j]);
 			}
 		}
-		else if(field == 2 && strcmp(str, *address_book->list[i].phone_numbers) == 0)
-		{
-			found = 1;
-		}
-		else if(field == 3 && strcmp(str, *address_book->list[i].email_addresses) == 0)
+	}
+
+	else if(field == 2)
+	{
+		for(int j = 0; j < PHONE_NUMBER_COUNT; j++)
 		{
 			if(strcmp(str, address_book->list[i].phone_numbers[j]) == 0)
 			{
