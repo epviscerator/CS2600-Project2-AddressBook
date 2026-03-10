@@ -246,11 +246,127 @@ Status add_contacts(AddressBook *address_book)
 Status search(const char *str, AddressBook *address_book, int loop_count, int field, const char *msg, Modes mode)
 {
 	/* Add the functionality for adding contacts here */
+	int option;
+	menu_header(msg);
+
+	printf("\n0. Back\n");
+	printf("1. Name\n");
+	printf("2. Phone No\n");
+	printf("3. Email ID\n");
+	printf("4. Serial No\n");
+
+	printf("\n");
+
+	option = get_option(NUM, "Please select an option: ");
+	switch (option) {
+		case e_first_opt:
+			break;
+		case e_second_opt:
+			char namePlaceholder[NAME_LEN];
+			printf("Enter the name: ");
+			scanf("%s", namePlaceholder);
+			strcpy(namePlaceholder, strcmp(namePlaceholder, "#") == 0 ? "" : namePlaceholder); // "#" is not allowed
+			menu_header("Search Result:");
+			printf("\n==============================\n");
+			for(int i = 0; i < address_book->count; i++) {
+				if (strcmp(address_book->list[i].name[0], namePlaceholder) == 0) {
+					printf("| %d, %s, %s, %s\n",
+						address_book->list[i].si_no,
+						address_book->list[i].name[0],
+						address_book->list[i].phone_numbers[0],
+						address_book->list[i].email_addresses[0]
+					);
+					for (int j = 1; j < 5; j++) {
+						printf("| %s, %s\n",
+							address_book->list[i].phone_numbers[j],
+							address_book->list[i].email_addresses[j]
+						);
+					}
+				}
+			}
+			break;
+		case e_third_opt:
+			char numberPlaceholder[NUMBER_LEN];
+			printf("Enter the phone number: ");
+			scanf("%s", numberPlaceholder);
+			strcpy(numberPlaceholder, strcmp(numberPlaceholder, "#") == 0 ? "" : numberPlaceholder);
+			menu_header("Search Result:");
+			printf("\n==============================\n");
+			for(int i = 0; i < address_book->count; i++) {
+				for (int f = 0; f < 5; f++) {
+					if (strcmp(address_book->list[i].phone_numbers[f], numberPlaceholder) == 0) {
+						printf("| %d, %s, %s, %s\n",
+							address_book->list[i].si_no,
+							address_book->list[i].name[0],
+							address_book->list[i].phone_numbers[0],
+							address_book->list[i].email_addresses[0]
+						);
+						for (int j = 1; j < 5; j++) {
+							printf("| %s, %s\n",
+								address_book->list[i].phone_numbers[j],
+								address_book->list[i].email_addresses[j]
+							);
+						}
+					}
+				}	
+			}
+			break;
+		case e_fourth_opt:
+			char emailPlaceholder[EMAIL_ID_LEN];
+			printf("Enter the email: ");
+			scanf("%s", emailPlaceholder);
+			strcpy(emailPlaceholder, strcmp(emailPlaceholder, "#") == 0 ? "" : emailPlaceholder);
+			menu_header("Search Result:");
+			printf("\n==============================\n");
+			for(int i = 0; i < address_book->count; i++) {
+				for (int f = 0; f < 5; f++) {
+					if (strcmp(address_book->list[i].email_addresses[f], emailPlaceholder) == 0) {
+						printf("| %d, %s, %s, %s\n",
+							address_book->list[i].si_no,
+							address_book->list[i].name[0],
+							address_book->list[i].phone_numbers[0],
+							address_book->list[i].email_addresses[0]
+						);
+						for (int j = 1; j < 5; j++) {
+							printf("| %s, %s\n",
+								address_book->list[i].phone_numbers[j],
+								address_book->list[i].email_addresses[j]
+							);
+						}
+					}
+				}	
+			}
+			break;
+		case e_fifth_opt:
+			int siNoPlaceholder;
+			printf("Enter the serial number: ");
+			scanf("%d", &siNoPlaceholder);
+			menu_header("Search Result:");
+			printf("\n==============================\n");
+			for(int i = 0; i < address_book->count; i++) {
+				if (address_book->list[i].si_no == siNoPlaceholder) {
+					printf("| %d, %s, %s, %s\n",
+						address_book->list[i].si_no,
+						address_book->list[i].name[0],
+						address_book->list[i].phone_numbers[0],
+						address_book->list[i].email_addresses[0]
+					);
+					for (int j = 1; j < 5; j++) {
+						printf("| %s, %s\n",
+							address_book->list[i].phone_numbers[j],
+							address_book->list[i].email_addresses[j]
+						);
+					}
+				}
+			}
+			break;
+	}
 }
 
 Status search_contact(AddressBook *address_book)
 {
 	/* Add the functionality for search contacts here */
+	search("", address_book, 0, 0, "Search Contacts:", e_search_contact);
 }
 
 Status edit_contact(AddressBook *address_book)
