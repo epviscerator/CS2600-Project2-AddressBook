@@ -219,6 +219,7 @@ Status add_contacts(AddressBook *address_book)
 
 		printf("Please select an option: \n");
 
+		int phoneNumNum = 0;
 		option = get_option(NUM, "");
 		switch (option) {
 			case 0:
@@ -232,8 +233,20 @@ Status add_contacts(AddressBook *address_book)
 				//nameNum++;
 				break;
 			case 2:
+				char tempPhoneChar[NAME_LEN];
 				printf("Enter phone number: ");
-				scanf("%s", newContact.phone_numbers);
+				
+				scanf("%s", tempPhoneChar);
+				int tempNumber; 
+				tempNumber= atoi(tempPhoneChar);
+				if (tempNumber < 0) {
+					printf("Invalid input, cannot have a negative phone number");
+				}
+				else {
+					strcpy(newContact.phone_numbers[phoneNumNum], tempPhoneChar);
+					phoneNumNum++;
+				}
+				
 
 				break;
 			case 3:
