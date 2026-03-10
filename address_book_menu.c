@@ -202,12 +202,7 @@ Status add_contacts(AddressBook *address_book)
 {
 	ContactInfo newContact;
 
-	menu_header("Add Contacts");
-
-	printf("\n0. Exit\n");
-	printf("1. Name : \n");
-	printf("2. Phone No. : \n");
-	printf("3. Email : \n");
+	
 
 	int nameNum = 1;
 	char tempName[30];
@@ -221,8 +216,17 @@ Status add_contacts(AddressBook *address_book)
 	*/
 		int emailNum = 0;
 		int phoneNumNum = 0;
-		option = get_option(NUM, "");
+		char tempPhoneChar[NAME_LEN];
+
 		while (option != 0) {
+			menu_header("Add Contacts");
+
+			printf("\n0. Exit\n");
+			printf("1. Name : \n");
+			printf("2. Phone No. : \n");
+			printf("3. Email : \n");
+
+			option = get_option(NUM, "");
 			switch (option) {
 				case 0:
 					break;
@@ -235,7 +239,7 @@ Status add_contacts(AddressBook *address_book)
 					//nameNum++;
 					break;
 				case 2:
-					char tempPhoneChar[NAME_LEN];
+					
 					printf("Enter phone number: ");
 					
 					scanf("%s", tempPhoneChar);
