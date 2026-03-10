@@ -47,7 +47,6 @@ int get_option(int type, const char *msg)
 		
 	}
 		
-	/* Fill the code to add above functionality */
 }
 
 Status save_prompt(AddressBook *address_book)
@@ -60,7 +59,7 @@ Status save_prompt(AddressBook *address_book)
 
 		option = get_option(CHAR, "\rEnter 'N' to Ignore and 'Y' to Save: ");
 
-		if (option == 'Y')
+		if (&option == "Y")
 		{
 			save_file(address_book);
 			printf("Exiting. Data saved in %s\n", DEFAULT_FILE);
@@ -207,11 +206,8 @@ Status add_contacts(AddressBook *address_book)
 	int option = -1;
 	ContactInfo newContact;
 
-	
-	
-
 	int nameNum = 1;
-	//char tempName[30];
+	char tempName[30];
 
 	while (option != 0) {
 		menu_header("Add Contact");
@@ -223,6 +219,7 @@ Status add_contacts(AddressBook *address_book)
 
 		printf("Please select an option: \n");
 
+		int phoneNumNum = 0;
 		option = get_option(NUM, "");
 		switch (option) {
 			case 0:
@@ -236,29 +233,41 @@ Status add_contacts(AddressBook *address_book)
 				//nameNum++;
 				break;
 			case 2:
+				char tempPhoneChar[NAME_LEN];
 				printf("Enter phone number: ");
-				scanf("%s", newContact.phone_numbers);
+				
+				scanf("%s", tempPhoneChar);
+				int tempNumber; 
+				tempNumber= atoi(tempPhoneChar);
+				if (tempNumber < 0) {
+					printf("Invalid input, cannot have a negative phone number");
+				}
+				else {
+					strcpy(newContact.phone_numbers[phoneNumNum], tempPhoneChar);
+					phoneNumNum++;
+				}
+				
+
 				break;
 			case 3:
 				printf("Enter email: ");
 				scanf("%s", newContact.email_addresses);
+
 				break;
 			
 			default:
-			printf("Invalid option\n");
+				printf("Invalid option\n");
 		}
-		return e_success;
+	
 	}	
-	/*
-	char tempName[30];
-	char tempPhone[16]; // Australians have 15-digit phone numbers.
-	char tempEmail[320]; 
+	
+	address_book->count++; 
 
-	// struct ContactInfo ci; 
-	scanf("Add your contact's name: %s", &tempName);
-	scanf("Add your contact's phone number: %s", &tempPhone);
-	scanf("Add your contact's email addresses: %s", &tempEmail);
-	*/
+	
+	newContact.si_no = address_book->count; 
+	address_book->list = &newContact; 
+
+	return e_success;
 }
 
 Status search(const char *str, AddressBook *address_book, int loop_count, int field, const char *msg, Modes mode)
@@ -273,15 +282,15 @@ Status search(const char *str, AddressBook *address_book, int loop_count, int fi
 
 	for(i = 0; i < loop_count; i++)
 	{
-		if(field == 1 && strcmp(str, address_book->list[i].name) == 0)
+		if((field == 1 && strcmp(str, *address_book->list[i].name)) == 0)
 		{
 			found = 1;
 		}
-		else if(field == 2 && strcmp(str, address_book->list[i].phone_numbers) == 0)
+		else if(field == 2 && strcmp(str, *address_book->list[i].phone_numbers) == 0)
 		{
 			found = 1;
 		}
-		else if(field == 3 && strcmp(str, address_book->list[i].email_addresses) == 0)
+		else if(field == 3 && strcmp(str, *address_book->list[i].email_addresses) == 0)
 		{
 			found = 1;
 		}
