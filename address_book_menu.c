@@ -153,8 +153,8 @@ void main_menu(void)
 Status menu(AddressBook *address_book)
 {
 	
-	ContactInfo backup;
-	Status ret;
+	//ContactInfo backup;
+	//Status ret;
 	int option;
 
 	do
@@ -244,49 +244,68 @@ Status add_contacts(AddressBook *address_book)
 
 Status search(const char *str, AddressBook *address_book, int loop_count, int field, const char *msg, Modes mode)
 {
-	/* Add the functionality for adding contacts here */
 
 	//int i;
-	//int found = 0;
+	int found = 0;
 
 	printf("\nSearch Results\n");
 	printf("----------------------------------\n");
 
 	for(int i = 0; i < address_book->count; i++)
-{
-	if(field == 1)
 	{
-		for(int j = 0; j < NAME_COUNT; j++)
+		if(field == 1)
 		{
-			if(strcmp(str, address_book->list[i].name[j]) == 0)
+			for(int j = 0; j < NAME_COUNT; j++)
 			{
-				printf("Found: %s\n", address_book->list[i].name[j]);
+				if(strcmp(str, address_book->list[i].name[j]) == 0)
+				{
+					printf("%d. %s | %s | %s\n",
+						address_book->list[i].si_no,
+						address_book->list[i].name[j],
+						address_book->list[i].phone_numbers[0],
+						address_book->list[i].email_addresses[0]);
+					found = 1;
+				}
+			}
+		}
+
+		else if(field == 2)
+		{
+			for(int j = 0; j < PHONE_NUMBER_COUNT; j++)
+			{
+				if(strcmp(str, address_book->list[i].phone_numbers[j]) == 0)
+				{
+					printf("%d. %s | %s | %s\n",
+						address_book->list[i].si_no,
+						address_book->list[i].name[0],
+						address_book->list[i].phone_numbers[j],
+						address_book->list[i].email_addresses[0]);
+					found = 1;
+				}
+			}
+		}
+
+		else if(field == 3)
+		{
+			for(int j = 0; j < EMAIL_ID_COUNT; j++)
+			{
+				if(strcmp(str, address_book->list[i].email_addresses[j]) == 0)
+				{
+					printf("%d. %s | %s | %s\n",
+						address_book->list[i].si_no,
+						address_book->list[i].name[0],
+						address_book->list[i].phone_numbers[0],
+						address_book->list[i].email_addresses[j]);
+					found = 1;
+				}
 			}
 		}
 	}
 
-	else if(field == 2)
+	if(!found)
 	{
-		for(int j = 0; j < PHONE_NUMBER_COUNT; j++)
-		{
-			if(strcmp(str, address_book->list[i].phone_numbers[j]) == 0)
-			{
-				printf("Found phone\n");
-			}
-		}
+		printf("No matching contacts found.\n");
 	}
-
-	else if(field == 3)
-	{
-		for(int j = 0; j < EMAIL_ID_COUNT; j++)
-		{
-			if(strcmp(str, address_book->list[i].email_addresses[j]) == 0)
-			{
-				printf("Found email\n");
-			}
-		}
-	}
-}
 
 	printf("----------------------------------\n");
 
