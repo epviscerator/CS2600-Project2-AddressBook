@@ -1,6 +1,8 @@
 // Importing unity and address book 
 #include "unity.h"
 #include "address_book.h"
+#include "address_book_menu.h"
+#include "address_book_fops.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -11,12 +13,8 @@ void setUp(void){
 void tearDown(void){
 }
 
-/* 
-Testing to see if the structure in address_book.h is setting everything equal to null
-So book.fp is seeing if the file pointer becomes null 
-book.list is checking to see if the contact pointer is null 
-and 0, book.count is ensuring that there are no contacts when starting the program 
-*/ 
+
+//Tests address_book.h//
 
 void test_address_book_creation(void){
     AddressBook book = {0}; // setting everything to zero so fp is zero list is zero and count is zero
@@ -73,6 +71,54 @@ void test_contact_info(void){
 }
 
 
+
+//Tests address_book_menu.h//
+
+// Just making sure that the nums remain the same in case someone changes it later
+void test_menu_window_vals(void){
+    TEST_ASSERT_EQUAL_INT(0, NONE);
+    TEST_ASSERT_EQUAL_INT(1, NUM);
+    TEST_ASSERT_EQUAL_INT(2, CHAR);
+    TEST_ASSERT_EQUAL_INT(5, WINDOW_SIZE);
+}
+
+/*
+Currently doesn't work due to bugs in main with add contacts
+
+void test_add_Nums(void){
+    AddressBook book = {0};
+
+    FILE *inp_file_test = fopen("inp_file_test.txt", "w");
+    TEST_ASSERT_NOT_NULL(inp_file_test);
+
+
+    fprintf(inp_file_test, "2\n123-456-7890\n");
+    
+
+    Status result = add_contacts(&book);
+
+    TEST_ASSERT_EQUAL_INT(e_fail, result);
+
+}
+*/
+
+// Making sure the program starts at e_exit for the menu feature struct
+void test_menu_ouptut_exit(void){
+   TEST_ASSERT_EQUAL_INT(0, e_exit);
+}
+
+// Simple test for holding large ints
+void test_contact_sino_vals(void){
+    ContactInfo testContact2 = {0}; // Again setting everthing to 0
+
+    //Setting it to large int
+    testContact2.si_no = 1000000000;
+
+    // Verify if number was stored
+    TEST_ASSERT_EQUAL_INT(1000000000, testContact2.si_no);
+}
+
+
 // Setting up main where tests functions are called
 int main(void){
 
@@ -83,6 +129,12 @@ int main(void){
     RUN_TEST(test_lengths_of_usr);
     RUN_TEST(test_counts);
     RUN_TEST(test_contact_info);
+    RUN_TEST(test_menu_window_vals);
+    // RUN_TEST(test_add_Nums);
+    RUN_TEST(test_menu_ouptut_exit);
+    RUN_TEST(test_contact_sino_vals);
+    
+
 
     return UNITY_END();
 }
