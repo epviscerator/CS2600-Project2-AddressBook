@@ -377,6 +377,9 @@ Status edit_contact(AddressBook *address_book)
 {
 	/* Add the functionality for edit contacts here */
 	int option;
+	int subOption;
+	int siNoToEdit; // After search
+	int indexToEdit; // Edit Email/Phone Number
 	ContactInfo searchContact;
 
 	menu_header("Search Contact to Edit by:");
@@ -398,6 +401,51 @@ Status edit_contact(AddressBook *address_book)
 			printf("Enter the Name: ");
 			scanf("%s", searchContact.name[0]);
 			// search for contact, etc. etc.
+			search(searchContact.name[0], address_book, address_book->count, 1, "", 0);
+			printf("Select a Serial Number to Edit: ");
+			scanf("%d", siNoToEdit);
+			for(int i = 0; i < address_book->count; i++) {
+				if (address_book->list[i].si_no == siNoToEdit) {
+					menu_header("Edit Contact:");
+					
+					printf("\n0. Exit\n");
+					printf("1. Name       : %s\n", address_book->list[i].name[0]);
+					printf("2. Phone No 1 : %s\n", address_book->list[i].phone_numbers[0]);
+					for(int p = 1; p < sizeof(address_book->list[i].phone_numbers); p++) {
+						if (address_book->list[i].phone_numbers[p][0] != '\0') {
+							printf("            %d : %s\n", p+1, address_book->list[i].phone_numbers[p]);
+						}
+					}
+					printf("3. Email ID 1 : %s\n", address_book->list[i].email_addresses[0]);
+					for(int e = 1; e < sizeof(address_book->list[i].email_addresses); e++) {
+						if (address_book->list[i].email_addresses[e][0] != '\0') {
+							printf("            %d : %s\n", e+1, address_book->list[i].email_addresses[e]);
+						}
+					}
+					
+					printf("Please select an option: ");
+					
+					subOption = get_option(NUM, "");
+					if(subOption == e_second_opt) {
+						printf("Enter new Name: ");
+						scanf("%s", address_book->list[i].name[0]);
+					}
+					if(subOption == e_third_opt) {
+						printf("Enter Phone Number index (1-5) to be changed: ");
+						scanf("%d", indexToEdit);
+						indexToEdit = indexToEdit < 1 || indexToEdit > 5 ? 1 : indexToEdit;
+						printf("Enter new Phone Number: ");
+						scanf("%s", address_book->list[i].phone_numbers[indexToEdit-1]);
+					}
+					if(subOption == e_fourth_opt) {
+						printf("Enter Email index (1-5) to be changed: ");
+						scanf("%d", indexToEdit);
+						indexToEdit = indexToEdit < 1 || indexToEdit > 5 ? 1 : indexToEdit;
+						printf("Enter new Email: ");
+						scanf("%s", address_book->list[i].email_addresses[indexToEdit-1]);
+					}
+				}
+			}
 			break;
 
 		case e_third_opt:
