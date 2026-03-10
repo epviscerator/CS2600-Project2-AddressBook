@@ -202,57 +202,66 @@ Status add_contacts(AddressBook *address_book)
 {
 	ContactInfo newContact;
 
+	menu_header("Add Contacts");
+
+	printf("\n0. Exit\n");
+	printf("1. Name : \n");
+	printf("2. Phone No. : \n");
+	printf("3. Email : \n");
+
 	int nameNum = 1;
 	char tempName[30];
 	int option;
-
+	/*
 	printf("Enter phone number: ");
 	scanf("%s", newContact.phone_numbers[0]);
 
 	printf("Enter email address: ");
 	scanf("%s", newContact.email_addresses[0]);
-
+	*/
+		int emailNum = 0;
 		int phoneNumNum = 0;
 		option = get_option(NUM, "");
-		switch (option) {
-			case 0:
-				break;
-			
-			case 1:
-				// Add name
-				printf("Enter your contact's name: ");
-				scanf("%s", newContact.name);
+		while (option != 0) {
+			switch (option) {
+				case 0:
+					break;
 				
-				//nameNum++;
-				break;
-			case 2:
-				char tempPhoneChar[NAME_LEN];
-				printf("Enter phone number: ");
-				
-				scanf("%s", tempPhoneChar);
-				int tempNumber; 
-				tempNumber= atoi(tempPhoneChar);
-				if (tempNumber < 0) {
-					printf("Invalid input, cannot have a negative phone number");
-				}
-				else {
-					strcpy(newContact.phone_numbers[phoneNumNum], tempPhoneChar);
-					phoneNumNum++;
-				}
-				
+				case 1:
+					// Add name
+					printf("Enter your contact's name: ");
+					scanf("%s", newContact.name);
+					
+					//nameNum++;
+					break;
+				case 2:
+					char tempPhoneChar[NAME_LEN];
+					printf("Enter phone number: ");
+					
+					scanf("%s", tempPhoneChar);
+					int tempNumber; 
+					tempNumber= atoi(tempPhoneChar);
+					if (tempNumber < 0) {
+						printf("Invalid input, cannot have a negative phone number");
+					}
+					else {
+						strcpy(newContact.phone_numbers[phoneNumNum], tempPhoneChar);
+						phoneNumNum++;
+					}
+					
 
-				break;
-			case 3:
-				printf("Enter email: ");
-				scanf("%s", newContact.email_addresses);
-
-				break;
-			
-			default:
-				printf("Invalid option\n");
-		}
+					break;
+				case 3:
+					printf("Enter email: ");
+					scanf("%s", newContact.email_addresses[emailNum]);
+					emailNum++;
+					break;
+				
+				default:
+					printf("Invalid option\n");
+			}
 	
-
+		}
 		address_book->count++; 
 
 		
