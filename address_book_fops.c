@@ -37,6 +37,7 @@ Status load_file(AddressBook *address_book)
 		if (address_book->list == NULL) {
 			fprintf(stderr, "Error: Not enough memory for file read/write");
 			fclose(address_book->fp);
+			exit(1);
 			return e_fail;
 		}
 		else {

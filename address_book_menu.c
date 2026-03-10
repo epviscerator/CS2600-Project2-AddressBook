@@ -139,6 +139,7 @@ Status menu(AddressBook *address_book)
 		{
 			case e_add_contact:
 				/* Add your implementation to call add_contacts function here */
+				add_contacts(address_book);
 				break;
 			case e_search_contact:
 				search_contact(address_book);
@@ -166,6 +167,79 @@ Status menu(AddressBook *address_book)
 Status add_contacts(AddressBook *address_book)
 {
 	/* Add the functionality for adding contacts here */
+	
+	ContactInfo newContact;
+	//strcpy(newContact.name[0], "#");
+	printf("Enter the name for the new contact: ");
+	scanf("%s", newContact.name[0]);
+	for (int i = 0; i < 5; i++) {
+		strcpy(newContact.phone_numbers[i], "#");
+		strcpy(newContact.email_addresses[i], "#");
+	}
+	int option;
+	int itemIndex;
+	do {
+		menu_header("Add Contact:");
+
+		printf("\n0. Back\n");
+		printf("1. Name       : %s\n", newContact.name[0]);
+		printf("2. Phone No 1 : %s\n", newContact.phone_numbers[0]);
+		printf("            2 : %s\n", newContact.phone_numbers[1]);
+		printf("            3 : %s\n", newContact.phone_numbers[2]);
+		printf("            4 : %s\n", newContact.phone_numbers[3]);
+		printf("            5 : %s\n", newContact.phone_numbers[4]);
+		printf("3. Email ID 1 : %s\n", newContact.email_addresses[0]);
+		printf("            2 : %s\n", newContact.email_addresses[1]);
+		printf("            3 : %s\n", newContact.email_addresses[2]);
+		printf("            4 : %s\n", newContact.email_addresses[3]);
+		printf("            5 : %s\n", newContact.email_addresses[4]);
+
+		printf("\n");
+		option = get_option(NUM, "Please select an option: ");
+
+		switch (option) {
+			case e_first_opt:
+				break;
+			case e_second_opt:
+				char namePlaceholder[NAME_LEN];
+				printf("Enter the name: ");
+				scanf("%s", namePlaceholder);
+				strcpy(newContact.name[0], namePlaceholder);
+				break;
+			case e_third_opt:
+				char numberPlaceholder[NUMBER_LEN];
+				printf("Enter which phone number (1-5) to edit: ");
+				scanf("%d", &itemIndex);
+				printf("Enter the phone number (type '#' to mark as blank): ");
+				scanf("%s", numberPlaceholder);
+				strcpy(newContact.phone_numbers[itemIndex-1], numberPlaceholder);
+				break;
+			case e_fourth_opt:
+				char emailPlaceholder[EMAIL_ID_LEN];
+				printf("Enter which email (1-5) to edit: ");
+				scanf("%d", &itemIndex);
+				printf("Enter the email (type '#' to mark as blank): ");
+				scanf("%s", emailPlaceholder);
+				strcpy(newContact.email_addresses[itemIndex-1], emailPlaceholder);
+				break;
+		}
+	} while (option != e_first_opt);
+	do {
+		option = get_option(CHAR, "Enter 'Y' to Save and 'N' to Discard: ");
+	} while (option != 'Y' && option != 'N');
+	if (option == 'Y') {
+		strcpy(address_book->list[address_book->count].name[0], newContact.name[0]);
+		for (int i = 0; i < 5; i++) {
+			strcpy(address_book->list[address_book->count].phone_numbers[i], newContact.phone_numbers[i]);
+			strcpy(address_book->list[address_book->count].email_addresses[i], newContact.email_addresses[i]);
+		}
+		address_book->count = address_book->count + 1;
+		address_book->list = realloc(address_book->list, sizeof(ContactInfo) * (address_book->count + 1));
+		if (address_book->list == NULL) {
+			fprintf(stderr, "Error: not enough memory to add contact");
+			exit(1);
+		}
+	}
 }
 
 Status search(const char *str, AddressBook *address_book, int loop_count, int field, const char *msg, Modes mode)
