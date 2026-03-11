@@ -260,6 +260,7 @@ Status search(const char *str, AddressBook *address_book, int loop_count, int fi
 	option = get_option(NUM, "Please select an option: ");
 	switch (option) {
 		case e_first_opt:
+			return e_fail;
 			break;
 		case e_second_opt:
 			char namePlaceholder[NAME_LEN];
@@ -361,6 +362,7 @@ Status search(const char *str, AddressBook *address_book, int loop_count, int fi
 			}
 			break;
 	}
+	return e_success;
 }
 
 Status search_contact(AddressBook *address_book)
@@ -372,13 +374,16 @@ Status search_contact(AddressBook *address_book)
 Status edit_contact(AddressBook *address_book)
 {
 
-	search("", address_book, 0, 0, "Search Contacts: ", e_edit_contact); 
+	int ret = search("", address_book, 0, 0, "Search Contacts to Edit by: ", e_edit_contact); 
 	int serialnumbertoedit; 
 	int contactindextoedit;
 	int option;
 	int itemIndex;
 	ContactInfo placeholderContact;
 
+	if (ret == e_fail) {
+		return e_fail;
+	}
 
 	printf("Enter the serial number to edit: ");
 	scanf("%d", &serialnumbertoedit);
@@ -387,15 +392,15 @@ Status edit_contact(AddressBook *address_book)
 			contactindextoedit = i;
 
 			strcpy(placeholderContact.name[0], address_book->list[contactindextoedit].name[0]);
-			for(int i = 0; i < 5; i++){
-				strcpy(placeholderContact.phone_numbers[i], address_book->list[contactindextoedit].phone_numbers[i]);
-				strcpy(placeholderContact.email_addresses[i], address_book->list[contactindextoedit].email_addresses[i]);
+			for(int j = 0; j < 5; j++){
+				strcpy(placeholderContact.phone_numbers[j], address_book->list[contactindextoedit].phone_numbers[j]);
+				strcpy(placeholderContact.email_addresses[j], address_book->list[contactindextoedit].email_addresses[j]);
 			}
 		}
 	}
 	
 	do {
-		menu_header("Add Contact:");
+		menu_header("Edit Contact:");
 
 		printf("\n0. Back\n");
 		printf("1. Name       : %s\n", placeholderContact.name[0]);
@@ -412,6 +417,7 @@ Status edit_contact(AddressBook *address_book)
 
 		printf("\n");
 		
+		option = get_option(NUM, "Please select an option: ");
 
 		switch (option) {
 			case e_first_opt:
@@ -453,7 +459,7 @@ Status delete_contact(AddressBook *address_book)
 	search("", address_book, 0, 0, "Search Contacts to Delete by:", e_delete_contact);
 	int siNo2Delete;
 	printf("Enter the serial number to delete: \n");
-	scanf("%d", siNo2Delete);
+	scanf("%d", &siNo2Delete);
 	for(int i = 0; i < address_book->count; i++) {
 		if (address_book->list[i].si_no == siNo2Delete) {
 			for (int j = i; j < (address_book->count - 1); j++) {
