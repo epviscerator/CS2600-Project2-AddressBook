@@ -85,6 +85,28 @@ Status list_contacts(AddressBook *address_book, const char *title, int *index, c
 	 * The menu provide navigation option if the entries increase the page size
 	 */ 
 
+	menu_header(title);
+
+	printf("\n");
+
+	for(int i = 0; i < address_book->count; i++) {
+		printf("==============================\n");
+		printf("| Serial No. : %d | Name : %s | Phone Number 1 : %s | Email Address 1 : %s\n",
+			address_book->list[i].si_no,
+			address_book->list[i].name[0],
+			address_book->list[i].phone_numbers[0],
+			address_book->list[i].email_addresses[0]
+		);
+		for (int j = 1; j < 5; j++) {
+			printf("|      Phone Number %d : %s | Email Address %d : %s\n",
+				j+1,
+				address_book->list[i].phone_numbers[j],
+				j+1,
+				address_book->list[i].email_addresses[j]
+			);
+		}
+	}
+	get_option(CHAR, msg);
 	return e_success;
 }
 
@@ -92,7 +114,8 @@ void menu_header(const char *str)
 {
 	fflush(stdout);
 
-	system("clear");
+	//system("clear");
+	system("cls");
 
 	printf("#######  Address Book  #######\n");
 	if (*str != '\0')
@@ -128,9 +151,10 @@ Status menu(AddressBook *address_book)
 
 		option = get_option(NUM, "");
 
-		if ((address_book-> count == 0) && (option != e_add_contact))
+		if ((address_book-> count == 0) && (option != e_add_contact) && (option != e_exit))
 		{
-			get_option(NONE, "No entries found!!. Would you like to add? Use Add Contacts");
+			printf("No contacts found\n");
+			get_option(CHAR, "Press any key to continue: ");
 
 			continue;
 		}
@@ -151,6 +175,7 @@ Status menu(AddressBook *address_book)
 				delete_contact(address_book);
 				break;
 			case e_list_contacts:
+				list_contacts(address_book, "Contacts List: ", 0, "Enter any key to continue: ", e_list_contacts);
 				break;
 				/* Add your implementation to call list_contacts function here */
 			case e_save:
@@ -271,20 +296,23 @@ Status search(const char *str, AddressBook *address_book, int loop_count, int fi
 			printf("\n==============================\n");
 			for(int i = 0; i < address_book->count; i++) {
 				if (strcmp(address_book->list[i].name[0], namePlaceholder) == 0) {
-					printf("| %d, %s, %s, %s\n",
+					printf("| Serial No. : %d | Name : %s | Phone Number 1 : %s | Email Address 1 : %s\n",
 						address_book->list[i].si_no,
 						address_book->list[i].name[0],
 						address_book->list[i].phone_numbers[0],
 						address_book->list[i].email_addresses[0]
 					);
 					for (int j = 1; j < 5; j++) {
-						printf("| %s, %s\n",
+						printf("|      Phone Number %d : %s | Email Address %d : %s\n",
+							j+1,
 							address_book->list[i].phone_numbers[j],
+							j+1,
 							address_book->list[i].email_addresses[j]
 						);
 					}
 				}
 			}
+			get_option(CHAR, "Enter any key to continue: ");
 			break;
 		case e_third_opt:
 			char numberPlaceholder[NUMBER_LEN];
@@ -296,21 +324,24 @@ Status search(const char *str, AddressBook *address_book, int loop_count, int fi
 			for(int i = 0; i < address_book->count; i++) {
 				for (int f = 0; f < 5; f++) {
 					if (strcmp(address_book->list[i].phone_numbers[f], numberPlaceholder) == 0) {
-						printf("| %d, %s, %s, %s\n",
+						printf("| Serial No. : %d | Name : %s | Phone Number 1 : %s | Email Address 1 : %s\n",
 							address_book->list[i].si_no,
 							address_book->list[i].name[0],
 							address_book->list[i].phone_numbers[0],
 							address_book->list[i].email_addresses[0]
 						);
 						for (int j = 1; j < 5; j++) {
-							printf("| %s, %s\n",
+							printf("|      Phone Number %d : %s | Email Address %d : %s\n",
+								j+1,
 								address_book->list[i].phone_numbers[j],
+								j+1,
 								address_book->list[i].email_addresses[j]
 							);
 						}
 					}
 				}	
 			}
+			get_option(CHAR, "Enter any key to continue: ");
 			break;
 		case e_fourth_opt:
 			char emailPlaceholder[EMAIL_ID_LEN];
@@ -322,21 +353,24 @@ Status search(const char *str, AddressBook *address_book, int loop_count, int fi
 			for(int i = 0; i < address_book->count; i++) {
 				for (int f = 0; f < 5; f++) {
 					if (strcmp(address_book->list[i].email_addresses[f], emailPlaceholder) == 0) {
-						printf("| %d, %s, %s, %s\n",
+						printf("| Serial No. : %d | Name : %s | Phone Number 1 : %s | Email Address 1 : %s\n",
 							address_book->list[i].si_no,
 							address_book->list[i].name[0],
 							address_book->list[i].phone_numbers[0],
 							address_book->list[i].email_addresses[0]
 						);
 						for (int j = 1; j < 5; j++) {
-							printf("| %s, %s\n",
+							printf("|      Phone Number %d : %s | Email Address %d : %s\n",
+								j+1,
 								address_book->list[i].phone_numbers[j],
+								j+1,
 								address_book->list[i].email_addresses[j]
 							);
 						}
 					}
 				}	
 			}
+			get_option(CHAR, "Enter any key to continue: ");
 			break;
 		case e_fifth_opt:
 			int siNoPlaceholder;
@@ -346,20 +380,23 @@ Status search(const char *str, AddressBook *address_book, int loop_count, int fi
 			printf("\n==============================\n");
 			for(int i = 0; i < address_book->count; i++) {
 				if (address_book->list[i].si_no == siNoPlaceholder) {
-					printf("| %d, %s, %s, %s\n",
+					printf("| Serial No. : %d | Name : %s | Phone Number 1 : %s | Email Address 1 : %s\n",
 						address_book->list[i].si_no,
 						address_book->list[i].name[0],
 						address_book->list[i].phone_numbers[0],
 						address_book->list[i].email_addresses[0]
 					);
 					for (int j = 1; j < 5; j++) {
-						printf("| %s, %s\n",
+						printf("|      Phone Number %d : %s | Email Address %d : %s\n",
+							j+1,
 							address_book->list[i].phone_numbers[j],
+							j+1,
 							address_book->list[i].email_addresses[j]
 						);
 					}
 				}
 			}
+			get_option(CHAR, "Enter any key to continue: ");
 			break;
 	}
 	return e_success;
