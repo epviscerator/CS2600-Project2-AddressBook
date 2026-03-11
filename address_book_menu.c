@@ -486,6 +486,15 @@ Status edit_contact(AddressBook *address_book)
 	do {
 		option = get_option(CHAR, "Enter 'Y' to Save Changes and 'N' to Discard: ");
 	} while (option != 'Y' && option != 'N');
+	if (option == 'Y') {
+		strcpy(address_book->list[contactindextoedit].name[0], placeholderContact.name[0]);
+		address_book->list[contactindextoedit].si_no = placeholderContact.si_no;
+		for (int i = 0; i < 5; i++) {
+			strcpy(address_book->list[contactindextoedit].phone_numbers[i], placeholderContact.phone_numbers[i]);
+			strcpy(address_book->list[contactindextoedit].email_addresses[i], placeholderContact.email_addresses[i]);
+		}
+	}
+
 
 	/* Add the functionality for edit contacts here */
 }

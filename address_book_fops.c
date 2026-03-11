@@ -8,8 +8,6 @@
 
 #include "address_book.h"
 
-// Do not, at all costs, touch anything in here
-// I managed to get it to work and I'm not sure I could figure it out again
 Status load_file(AddressBook *address_book)
 {
 	int ret = access(DEFAULT_FILE, F_OK);
