@@ -371,6 +371,79 @@ Status search_contact(AddressBook *address_book)
 
 Status edit_contact(AddressBook *address_book)
 {
+
+	search("", address_book, 0, 0, "Search Contacts: ", e_edit_contact); 
+	int serialnumbertoedit; 
+	int contactindextoedit;
+	int option;
+	int itemIndex;
+	ContactInfo placeholderContact;
+
+
+	printf("Enter the serial number to edit: ");
+	scanf("%d", &serialnumbertoedit);
+	for (int i = 0; i < address_book->count; i++){
+		if (address_book->list[i].si_no == serialnumbertoedit){
+			contactindextoedit = i;
+
+			strcpy(placeholderContact.name[0], address_book->list[contactindextoedit].name[0]);
+			for(int i = 0; i < 5; i++){
+				strcpy(placeholderContact.phone_numbers[i], address_book->list[contactindextoedit].phone_numbers[i]);
+				strcpy(placeholderContact.email_addresses[i], address_book->list[contactindextoedit].email_addresses[i]);
+			}
+		}
+	}
+	
+	do {
+		menu_header("Add Contact:");
+
+		printf("\n0. Back\n");
+		printf("1. Name       : %s\n", placeholderContact.name[0]);
+		printf("2. Phone No 1 : %s\n", placeholderContact.phone_numbers[0]);
+		printf("            2 : %s\n", placeholderContact.phone_numbers[1]);
+		printf("            3 : %s\n", placeholderContact.phone_numbers[2]);
+		printf("            4 : %s\n", placeholderContact.phone_numbers[3]);
+		printf("            5 : %s\n", placeholderContact.phone_numbers[4]);
+		printf("3. Email ID 1 : %s\n", placeholderContact.email_addresses[0]);
+		printf("            2 : %s\n", placeholderContact.email_addresses[1]);
+		printf("            3 : %s\n", placeholderContact.email_addresses[2]);
+		printf("            4 : %s\n", placeholderContact.email_addresses[3]);
+		printf("            5 : %s\n", placeholderContact.email_addresses[4]);
+
+		printf("\n");
+		
+
+		switch (option) {
+			case e_first_opt:
+				break;
+			case e_second_opt:
+				char namePlaceholder[NAME_LEN];
+				printf("Enter the name: ");
+				scanf("%s", namePlaceholder);
+				strcpy(placeholderContact.name[0], namePlaceholder);
+				break;
+			case e_third_opt:
+				char numberPlaceholder[NUMBER_LEN];
+				printf("Enter which phone number (1-5) to edit: ");
+				scanf("%d", &itemIndex);
+				printf("Enter the phone number (type '#' to mark as blank): ");
+				scanf("%s", numberPlaceholder);
+				strcpy(placeholderContact.phone_numbers[itemIndex-1], numberPlaceholder);
+				break;
+			case e_fourth_opt:
+				char emailPlaceholder[EMAIL_ID_LEN];
+				printf("Enter which email (1-5) to edit: ");
+				scanf("%d", &itemIndex);
+				printf("Enter the email (type '#' to mark as blank): ");
+				scanf("%s", emailPlaceholder);
+				strcpy(placeholderContact.email_addresses[itemIndex-1], emailPlaceholder);
+				break;
+		}
+	} while (option != e_first_opt);
+	do {
+		option = get_option(CHAR, "Enter 'Y' to Save Changes and 'N' to Discard: ");
+	} while (option != 'Y' && option != 'N');
+
 	/* Add the functionality for edit contacts here */
 }
 
