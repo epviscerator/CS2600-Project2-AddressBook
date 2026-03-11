@@ -377,4 +377,26 @@ Status edit_contact(AddressBook *address_book)
 Status delete_contact(AddressBook *address_book)
 {
 	/* Add the functionality for delete contacts here */
+	search("", address_book, 0, 0, "Search Contacts to Delete by:", e_delete_contact);
+	int siNo2Delete;
+	printf("Enter the serial number to delete: \n");
+	scanf("%d", siNo2Delete);
+	for(int i = 0; i < address_book->count; i++) {
+		if (address_book->list[i].si_no == siNo2Delete) {
+			for (int j = i; j < (address_book->count - 1); j++) {
+				address_book->list[j].si_no = address_book->list[j+1].si_no;
+				strcpy(address_book->list[j].name[0], address_book->list[j+1].name[0]);
+				for (int k = 0; k < 5; k++){
+					strcpy(address_book->list[j].phone_numbers[k], address_book->list[j+1].phone_numbers[k]);
+					strcpy(address_book->list[j].email_addresses[k], address_book->list[j+1].email_addresses[k]);
+				}
+			}
+			address_book->count--;
+			address_book->list = realloc(address_book->list, sizeof(ContactInfo) * (address_book->count));
+			if (address_book->list == NULL) {
+				fprintf(stderr, "Error: not enough memory after deletion");
+				exit(1);
+			}
+		}
+	}
 }
